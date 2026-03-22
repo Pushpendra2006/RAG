@@ -1,9 +1,9 @@
 streamlit
 youtube-transcript-api
-langchain
-langchain-community
-langchain-core
+langchain==0.2.16
+langchain-community==0.2.16
+langchain-core==0.2.38
 langchain-huggingface
-faiss-cpu
+faiss-cpu==1.7.4
 sentence-transformers
 huggingface-hub
