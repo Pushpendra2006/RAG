@@ -11,7 +11,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # ================= PAGE =================
 st.set_page_config(page_title="YouTube RAG Assistant", layout="wide")
-st.title("🤖 YouTube Transcript Assistant")
+st.title(" YouTube Transcript Assistant")
 
 
 # ================= TOKEN =================
@@ -50,7 +50,7 @@ def build_vector_store(transcript_text):
 
 
 # ================= SIDEBAR =================
-url = st.sidebar.text_input("🎬 Paste YouTube Video URL")
+url = st.sidebar.text_input(" Paste YouTube Video URL")
 
 if st.sidebar.button("Load Video"):
 
@@ -67,7 +67,7 @@ if st.sidebar.button("Load Video"):
                 st.session_state.vector_store = build_vector_store(text)
                 st.session_state.messages = []
 
-            st.sidebar.success("Video Loaded Successfully ✅")
+            st.sidebar.success("Video Loaded Successfully ")
 
         except Exception as e:
             st.sidebar.error(f"Transcript load failed: {e}")
@@ -117,4 +117,4 @@ Question:
         )
 
 else:
-    st.info("👈 Paste YouTube URL and click Load Video")
+    st.info(" Paste YouTube URL and click Load Video")
