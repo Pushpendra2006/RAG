@@ -8,54 +8,35 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.llms import HuggingFaceEndpoint
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-
-# ================= PAGE =================
 st.set_page_config(page_title="YouTube RAG Assistant", layout="wide")
 st.title(" YouTube Transcript Assistant")
-
-
-# ================= TOKEN =================
 hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
-
-# ================= SESSION =================
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
 if "vector_store" not in st.session_state:
     st.session_state.vector_store = None
 
-
-# ================= HELPERS =================
 def extract_video_id(url):
     match = re.search(r"(?:v=|youtu\.be/)([^&]+)", url)
     return match.group(1) if match else None
 
-
 @st.cache_resource
 def build_vector_store(transcript_text):
-
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
         chunk_overlap=150
     )
-
     docs = splitter.create_documents([transcript_text])
-
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
-
     return FAISS.from_documents(docs, embeddings)
 
-
-# ================= SIDEBAR =================
 url = st.sidebar.text_input(" Paste YouTube Video URL")
-
 if st.sidebar.button("Load Video"):
-
     video_id = extract_video_id(url)
-
     if not video_id:
         st.sidebar.error("Invalid URL")
     else:
@@ -63,7 +44,6 @@ if st.sidebar.button("Load Video"):
             with st.spinner("Fetching transcript and building knowledge base..."):
                 transcript = YouTubeTranscriptApi.get_transcript(video_id)
                 text = " ".join([t["text"] for t in transcript])
-
                 st.session_state.vector_store = build_vector_store(text)
                 st.session_state.messages = []
 
@@ -72,8 +52,7 @@ if st.sidebar.button("Load Video"):
         except Exception as e:
             st.sidebar.error(f"Transcript load failed: {e}")
 
-
-# ================= CHAT =================
+#CHAT
 if st.session_state.vector_store and hf_token:
 
     retriever = st.session_state.vector_store.as_retriever()
